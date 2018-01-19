@@ -1,0 +1,28 @@
+{
+  "scripts": {
+    "server": "nodemon --inspect --experimental-modules ./server-example/index.mjs",
+    "dev": "concurrently \"webpack --watch\" \"node --experimental-modules ./src-to-public.mjs\" \"firebase serve\"",
+    "devserver": "webpack-dev-server --hot --config webpack.config.js"
+  },
+  "dependencies": {
+    "concurrently": "^3.5.1",
+    "detective-es6": "^1.2.0",
+    "koa": "^2.4.1",
+    "koa-compress": "^2.0.0",
+    "koa-router": "^7.3.0",
+    "koa-server-push": "^0.1.0",
+    "mime-types": "^2.1.17",
+    "nodemon": "^1.12.5"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "oz.js": "^0.0.2",
+    "prismjs": "^1.9.0",
+    "showdown": "^1.8.4",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**",
+      "**/server-example/**"
+    ],
+    "rewrites": [
+      {
+        "source": "index.html",
+        "destination": "/index.html"
+      },
+      {
+        "source": "oz.js",
+        "destination": "/oz.js"
+      }
+    ],
+    "headers": [
+      {
+        "source" : "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
+        "headers" : [ {
+          "key" : "Access-Control-Allow-Origin",
+          "value" : "*"
+        } ]
+      },
+      {
+        "source" : "**/*.@(js)",
+        "headers" : [ {
+          "key" : "content-type",
+          "value" : "application/javascript; charset=utf-8"
+        } ]
+      }
+    ]
+  }
+}
