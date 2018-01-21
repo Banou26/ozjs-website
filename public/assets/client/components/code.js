@@ -142,7 +142,7 @@ const keydown = (ev) => {
 }
 
 const input = (ev, {host, state}) => {
-  const elem = ev.path[0]
+  const elem = ev.composedPath()[0]
   const offset = caret(host, elem)
   state.value = elem.textContent
   caret(host, elem, offset)
