@@ -111,6 +111,14 @@ footer {
     margin: 0 1rem;
   }
 }
+
+.soon {
+  margin: auto;
+  padding: 2rem;
+  padding-bottom: 4rem;
+  text-align: center;
+  color: #ECECEC;
+}
 `
 
 const template = ({host}) => {
@@ -181,6 +189,9 @@ const template = ({host}) => {
         value=${reactivityOverview.code}
       ></oz-code>
     </div>
+    <h2 class="soon">
+      Router and Store examples soon...
+    </h2>
   </div>
   <footer>Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas</footer>
   `
