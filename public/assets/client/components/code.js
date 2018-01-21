@@ -7,19 +7,25 @@ import '../util/prism-extends.js'
 const style = _ => css`
 @import url('/assets/client/libs/prism.css');
 
-oz-code { /* firefox fix */
-  display: inline-flex;
-}
 :host {
   display: inline-flex;
 }
+
+oz-code { /* firefox fixes */
+  display: inline-flex;
+}
+oz-code code {
+  padding: 1rem;
+}
+:host code {
+  padding: 1rem;
+}  /* firefox fixes */
 
 code {
   position: relative;
   text-shadow: none !important;
   outline: none;
   background-color: #151a1e !important;
-  padding: 1rem;
   border-radius: 1rem;
   white-space: pre-wrap !important;
   border-bottom-right-radius: 1rem;
@@ -202,8 +208,8 @@ export default registerElement({
           <head></head>
           <body>
             ${html || ''}
-            <script type="module">window.addEventListener('error', errorEvent => window.parent.postMessage(errorEvent.error.toString(), '*'))</script>
-            <script type="module">${value}</script>
+            <script ${process && process.env.webpack ? '' : 'type="module"'}>window.addEventListener('error', errorEvent => window.parent.postMessage(errorEvent.error.toString(), '*'))</script>
+            <script ${process && process.env.webpack ? '' : 'type="module"'}>${value}</script>
           </body>
         </html>`
         state.error = undefined

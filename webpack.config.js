@@ -1,6 +1,7 @@
 const path = require('path')
+const webpack = require('webpack')
 module.exports = {
-  entry: ['./src/libs/webcomponents.lite.js', './src/index.js'],
+  entry: ['./src/libs/webcomponents.lite.js'],
   output: {
     path: path.resolve(__dirname, './public/assets'),
     publicPath: '/assets',
@@ -19,5 +20,10 @@ module.exports = {
     alias: {
       '/oz.js$': 'C:\\Users\\Banou\\Desktop\\ozjs\\src\\index.js'
     }
-  }
+  },
+  plugins: [
+    new webpack.EnvironmentPlugin({
+      'webpack': true
+    })
+  ]
 }

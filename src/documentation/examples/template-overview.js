@@ -1,4 +1,8 @@
-export const code = `import { html } from '/oz.js'
+const webpack = process && process.env.webpack
+
+export const code = `${webpack ? '/*\n  ' : ''}import { html } from '/oz.js'
+${webpack ? `  This browser doesn't support ES2015 modules
+ */` : ''}
 const template = html\`<\${'p'}>\${'some text'}</\${'p'}>\`
 
 const instance = template()

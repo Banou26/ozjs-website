@@ -30,8 +30,10 @@ app-header {
 }
 </style>
 `
-
-export const code = `import { registerElement, html, css } from '/oz.js'
+const webpack = process && process.env.webpack
+export const code = `${webpack ? '/*\n  ' : ''}import { registerElement, html, css } from '/oz.js'
+${webpack ? `  This browser doesn't support ES2015 modules
+ */` : ''}
 
 const AppHeader = registerElement({
   name: 'app-header',

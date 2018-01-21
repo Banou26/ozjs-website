@@ -107,6 +107,7 @@ const template = ({host}) => {
 //     value=${item.value}
 //   ></oz-code>
 // </div>`)}
+  const ozjsBundle = process && process.env.webpack ? '<script src="/assets/code-result.js"></script>' : ''
   return html`
   <img id="logo" src="/assets/logo.svg">
   ${descNode}
@@ -114,7 +115,7 @@ const template = ({host}) => {
     <div class="example">
       <oz-markdown value=${componentOverview.documentation}></oz-markdown>
       <oz-code
-        html=${componentOverview.style}
+        html=${ozjsBundle + componentOverview.style}
         language="javascript"
         result=${descNode}
         editable="true"
@@ -124,6 +125,7 @@ const template = ({host}) => {
     <div class="example">
       <oz-markdown value=${templateOverview.documentation}></oz-markdown>
       <oz-code
+      html=${ozjsBundle}
         language="javascript"
         result="true"
         editable="true"
@@ -133,6 +135,7 @@ const template = ({host}) => {
     <div class="example">
       <oz-markdown value=${reactivityOverview.documentation}></oz-markdown>
       <oz-code
+      html=${ozjsBundle}
         language="javascript"
         result="true"
         editable="true"

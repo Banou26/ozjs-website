@@ -1,7 +1,7 @@
 {
   "scripts": {
     "server": "nodemon --inspect --experimental-modules ./server-example/index.mjs",
-    "dev": "concurrently \"webpack --watch\" \"node --experimental-modules ./src-to-public.mjs\" \"firebase serve\"",
+    "dev": "concurrently \"webpack --watch ./src/index.js\" \"webpack ./src/code-result.js --output-path=./public/assets --output-filename=code-result.js\" \"node --experimental-modules ./src-to-public.mjs\" \"firebase serve\"",
     "devserver": "webpack-dev-server --hot --config webpack.config.js"
   },
   "dependencies": {
