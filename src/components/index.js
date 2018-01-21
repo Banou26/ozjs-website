@@ -8,11 +8,47 @@ import * as templateOverview from '../documentation/examples/template-overview.j
 import * as reactivityOverview from '../documentation/examples/reactivity-overview.js'
 
 const style = _ => css`
-#logo {
-  display: block;
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+/* firefox fix */
+app-index {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  display: inline-block;
+  position: relative;
   margin: auto;
   margin-top: 10rem;
+}
+
+#logo {
+  margin: auto;
   height: 20rem;
+}
+
+#discord {
+  position: absolute;
+  right: -4rem;
+  bottom: 0;
+  height: 4rem;
+}
+
+#github {
+  position: absolute;
+  right: -3.6rem;
+  bottom: 4.2rem;
+  height: 3.2rem;
+}
+
+footer {
+  text-align: center;
+  color: #ECECEC;
+  padding: 2.5rem;
 }
 
 #description {
@@ -29,7 +65,6 @@ const style = _ => css`
 }
 
 #inner {
-  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: start;
@@ -109,7 +144,11 @@ const template = ({host}) => {
 // </div>`)}
   const ozjsBundle = process && process.env.webpack ? '<script src="/assets/code-result.js"></script>' : ''
   return html`
-  <img id="logo" src="/assets/logo.svg">
+  <div class="header">
+    <img id="logo" src="/assets/imgs/logo.svg">
+    <a href="https://github.com/Banou26/ozjs" target="_blank"><img id="github" src="/assets/imgs/github-light-120.png"></a>
+    <a href="https://discord.gg/ZKEbTqf" target="_blank"><img id="discord" src="/assets/imgs/discord-logo-white.svg"></a>
+  </div>
   ${descNode}
   <div id="inner">
     <div class="example">
@@ -143,6 +182,7 @@ const template = ({host}) => {
       ></oz-code>
     </div>
   </div>
+  <footer>Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas</footer>
   `
 }
 
