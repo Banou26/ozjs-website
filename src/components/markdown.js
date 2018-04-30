@@ -1,7 +1,6 @@
-import { html, css, registerElement } from '/oz.js'
-import '../libs/showdown.js'
+import { html, css, registerElement } from 'oz.js'
+import showdown from 'showdown'
 import extension from '../util/showdown-extension.js'
-/* global showdown */
 
 const converter = new showdown.Converter({ extensions: [extension] })
 
@@ -15,7 +14,7 @@ code {
 const template = ({host, props: { value }}) => {
   const result = document.createElement('div')
   if (value) result.innerHTML = converter.makeHtml(value)
-  return html`${result.childNodes.length ? [...result.childNodes] : ''}`
+  return html`${[...result.childNodes]}`
 }
 
 export default registerElement({

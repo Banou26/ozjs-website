@@ -1,6 +1,6 @@
-import { html, css, registerElement } from '/oz.js'
+import { html, css, registerElement } from 'oz.js'
 import Mount from './mount.js'
-import Header from './header.js'
+// import Header from './header.js'
 import Code from './code.js'
 import Markdown from './markdown.js'
 import * as componentOverview from '../documentation/examples/component-overview.js'
@@ -199,7 +199,7 @@ const template = ({host}) => {
 
 const Index = {
   name: 'app-index',
-  options: {shadowDom: 'open'},
+  shadowDom: 'open',
   template,
   style
 }
@@ -207,8 +207,7 @@ const Index = {
 export default registerElement(Index)
 
 export {
-  Mount,
-  Header,
+  // Header,
   Code,
   Markdown
 }

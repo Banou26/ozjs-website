@@ -7,14 +7,11 @@
       "**/node_modules/**",
       "**/server-example/**"
     ],
-    "rewrites": [
+    "redirects": [
       {
-        "source": "index.html",
-        "destination": "/index.html"
-      },
-      {
-        "source": "oz.js",
-        "destination": "/oz.js"
+        "source" : "/oz.js",
+        "destination" : "/assets/ozjs/index.js",
+        "type" : 302
       }
     ],
     "headers": [

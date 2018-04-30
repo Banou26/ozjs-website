@@ -1,4 +1,4 @@
-import { Element, html, css, reactify } from '/oz.js'
+import { Element, html, css, reactify } from 'oz.js'
 
 const template = state => a.
 html`

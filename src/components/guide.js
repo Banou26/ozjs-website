@@ -1,4 +1,4 @@
-import { Element, html, css } from '/oz.js'
+import { Element, html, css } from 'oz.js'
 
 export default class Guide extends Element {
   constructor () {

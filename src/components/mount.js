@@ -1,10 +1,12 @@
-import { html, css, registerElement } from '/oz.js'
+import { poz, css, registerElement } from 'oz.js'
+import store from '../store/index.js'
+import router from '../router/index.js'
 
 export default registerElement({
+  store,
+  router,
   name: 'app-mount',
-  template () {
-    return html`<router-view></router-view>`
-  },
+  template: _ => poz`router-view`,
   style () {
     return css`
     @import url('https://fonts.googleapis.com/css?family=News+Cycle');

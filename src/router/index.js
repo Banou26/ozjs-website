@@ -1,16 +1,17 @@
-import { Router } from '/oz.js'
+import { Router } from 'oz.js'
 import Index from '../components/index.js'
-import Guide from '../components/guide.js'
+// import Guide from '../components/guide.js'
 
-export default new Router({
+export default Router({
   routes: [
     {
       path: '/',
-      components: [Index]
-    },
-    {
-      path: '/guide',
-      components: [Guide]
+      name: 'index',
+      component: Index
     }
+    // {
+    //   path: '/guide',
+    //   components: [Guide]
+    // }
   ]
 })

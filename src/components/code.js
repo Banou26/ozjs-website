@@ -1,11 +1,11 @@
-import { html, css, registerElement } from '/oz.js'
+import { html, css, registerElement } from 'oz.js'
 import { caret } from '../util/caret.js'
 import '../libs/prism.js'
 import '../util/prism-extends.js'
 /* global Prism */
 
 const style = _ => css`
-@import url('/assets/client/libs/prism.css');
+@import url('/assets/style/prism.css');
 
 :host {
   display: inline-flex;
@@ -126,7 +126,7 @@ const template = ({host, state, props: { language, value: pValue, editable, disp
     spellcheck="false"
     on-input=${editable ? ev => input(ev, {host, state}) : null}
     on-keydown=${editable ? keydown : null}
-  >${code.childNodes.length ? [...code.childNodes] : ''}</code>
+  >${[...code.childNodes]}</code>
   ${typeof result === 'string' || error ? html`
   <div class="result ${error ? 'error' : ''}">
     ${error ? error.toString() : mountNode}
@@ -152,7 +152,7 @@ export const OzCodeErrorEvent = new Event('error', {bubbles: true, composed: tru
 
 export default registerElement({
   name: 'oz-code',
-  options: {shadowDom: 'open'},
+  shadowDom: 'open',
   props: ['language', 'value', 'result', 'editable', 'display', 'html'],
   template,
   style,
@@ -182,11 +182,9 @@ export default registerElement({
       return node
     }
   }),
-  watchers: {
-    resetValue ({state, props: {pValue}}) {
-      state.value = pValue
-    },
-    result ({host, state, props: { value: pValue, html }}) {
+  watchers: [
+    ({props: {pValue}}) => {},
+    ({host, state, props: { value: pValue, html }}) => {
       const { value = pValue, mountNode, ready } = state
       if (!mountNode || !value || !ready) return
       try {
@@ -194,12 +192,12 @@ export default registerElement({
         // mountNode.contentWindow.location.reload(true)
         // mountNode.contentDocument.open()
         // mountNode.contentDocument.write(`
-        // <html>
+        //   <html>
         //   <head></head>
         //   <body>
-        //     ${html}
-        //     <script type="module">window.addEventListener('error', errorEvent => window.parent.postMessage(errorEvent.error.toString(), '*'))</script>
-        //     <script type="module">${value}</script>
+        //     ${html || ''}
+        //     <script src="/assets/code-result-bundle.js"></script>
+        //     <script>${value}</script>
         //   </body>
         // </html>`)
         // mountNode.contentDocument.close()
@@ -208,8 +206,8 @@ export default registerElement({
           <head></head>
           <body>
             ${html || ''}
-            <script ${process && process.env.webpack ? '' : 'type="module"'}>window.addEventListener('error', errorEvent => window.parent.postMessage(errorEvent.error.toString(), '*'))</script>
-            <script ${process && process.env.webpack ? '' : 'type="module"'}>${value}</script>
+            <script src="/assets/code-result-bundle.js"></script>
+            <script>${value}</script>
           </body>
         </html>`
         state.error = undefined
@@ -219,5 +217,5 @@ export default registerElement({
         host.dispatchEvent(OzCodeErrorEvent)
       }
     }
-  }
+  ]
 })

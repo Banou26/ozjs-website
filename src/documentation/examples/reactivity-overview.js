@@ -1,9 +1,4 @@
-const webpack = process && process.env.webpack
-
-export const code = `${webpack ? '/*\n  ' : ''}import { reactify, watch } from '/oz.js'
-${webpack ? `  This browser doesn't support ES2015 modules
- */` : ''}
-const react = reactify({
+export const code = `const react = reactify({
   a: 1,
   b: 2,
   get c () {
