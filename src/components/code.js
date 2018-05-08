@@ -1,35 +1,36 @@
 import { html, css, registerElement } from 'oz.js'
 import { caret } from '../util/caret.js'
-import '../libs/prism.js'
+import Prism from 'prismjs'
 import '../util/prism-extends.js'
 /* global Prism */
 
 const style = _ => css`
 @import url('/assets/style/prism.css');
 
-:host {
+oz-code, :host {
   display: inline-flex;
 }
 
-oz-code { /* firefox fixes */
-  display: inline-flex;
-}
 oz-code code {
   padding: 1rem;
 }
-:host code {
+
+oz-code code, :host code {
   padding: 1rem;
 }  /* firefox fixes */
 
 code {
+  height: 100%;
+  width: 100%;
   position: relative;
   text-shadow: none !important;
   outline: none;
-  background-color: #151a1e !important;
-  border-radius: 1rem;
+  border-radius: .3rem;
   white-space: pre-wrap !important;
-  border-bottom-right-radius: 1rem;
-  border-top-right-radius: 1rem;
+  border-bottom-right-radius: .3rem;
+  border-top-right-radius: .3rem;
+  background-color: #151a1e !important;
+  /* border: 1px solid hsla(0, 0%, 17%, 1); */
 }
 
 code[contenteditable=""]::after, code[contenteditable="true"]::after {
@@ -39,6 +40,7 @@ code[contenteditable=""]::after, code[contenteditable="true"]::after {
   right: .5rem;
   color: #a5a5a5;
   font-size: 1.3rem;
+  pointer-events: none;
 }
 
 .error {
@@ -46,7 +48,7 @@ code[contenteditable=""]::after, code[contenteditable="true"]::after {
 }
 
 code.extended {
-  flex: 0 0 100%;
+  flex: 0 0 calc(100% - 2 * 1rem);
 }
 
 code.compact {
@@ -81,10 +83,7 @@ div.result {
 }
 
 @media screen and (max-width: 950px) {
-  oz-code{ /* firefox fix */
-    flex-direction: column;
-  }
-  :host {
+  oz-code, :host {
     flex-direction: column;
   }
 
@@ -115,8 +114,6 @@ div.result {
 
 const template = ({host, state, props: { language, value: pValue, editable, display, result }}) => {
   const { value = pValue, error, mountNode } = state
-  const code = document.createElement('div')
-  if (value && Prism.languages[language]) code.innerHTML = Prism.highlight(value, Prism.languages[language])
   let borderClass = ''
   if (result instanceof Node) borderClass = 'external'
   else borderClass = result ? 'result' : 'extended'
@@ -126,7 +123,7 @@ const template = ({host, state, props: { language, value: pValue, editable, disp
     spellcheck="false"
     on-input=${editable ? ev => input(ev, {host, state}) : null}
     on-keydown=${editable ? keydown : null}
-  >${[...code.childNodes]}</code>
+  >${html(value && Prism.languages[language] ? Prism.highlight(value, Prism.languages[language]) : '')}</code>
   ${typeof result === 'string' || error ? html`
   <div class="result ${error ? 'error' : ''}">
     ${error ? error.toString() : mountNode}
@@ -144,7 +141,7 @@ const keydown = (ev) => {
 const input = (ev, {host, state}) => {
   const elem = ev.composedPath()[0]
   const offset = caret(host, elem)
-  state.value = elem.textContent
+  state.value = elem.textContent.trim()
   caret(host, elem, offset)
 }
 
@@ -177,13 +174,12 @@ export default registerElement({
           this.error = ev.data
           caret(host, host.querySelector('code'), offset)
         })
-        node.addEventListener('load', _ => (this.ready = true))
+        node.addEventListener('load', _ => (this.ready = true), { once: true })
       }
       return node
     }
   }),
   watchers: [
-    ({props: {pValue}}) => {},
     ({host, state, props: { value: pValue, html }}) => {
       const { value = pValue, mountNode, ready } = state
       if (!mountNode || !value || !ready) return
@@ -219,3 +215,4 @@ export default registerElement({
     }
   ]
 })
+window.html = html

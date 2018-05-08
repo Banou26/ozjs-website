@@ -1,3 +1,5 @@
+import Prism from 'prismjs'
+
 Prism.languages.insertBefore('javascript', 'template-string', {
   'html-template-string': {
     pattern: /(html)`(?:\\[\s\S]|[^\\`])*`/,

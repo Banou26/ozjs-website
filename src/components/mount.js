@@ -17,7 +17,6 @@ export default registerElement({
       font-size: 62.5%;
       height: 100%;
       width: 100%;
-      background-color: #0f0f0f/*#151a1e #262d33*/;
     }
     
     body {
@@ -32,6 +31,7 @@ export default registerElement({
       height: 100%;
       width: 100%;
       display: inline-block;
+      background-color: #0f0f0f/*#151a1e #262d33*/;
     }
     `
   }

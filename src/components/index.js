@@ -1,83 +1,154 @@
-import { html, css, registerElement } from 'oz.js'
+import { poz, css, registerElement } from 'oz.js'
 import Mount from './mount.js'
 // import Header from './header.js'
 import Code from './code.js'
 import Markdown from './markdown.js'
-import * as componentOverview from '../documentation/examples/component-overview.js'
-import * as templateOverview from '../documentation/examples/template-overview.js'
-import * as reactivityOverview from '../documentation/examples/reactivity-overview.js'
+import * as overview from '../documentation/overview.js'
 
-const style = _ => css`
+const style = ({state: { loading }}) => css`
+@import url('https://fonts.googleapis.com/css?family=Roboto:100');
 
-:host {
-  display: flex;
-  flex-direction: column;
-}
-/* firefox fix */
-app-index {
-  display: flex;
-  flex-direction: column;
-}
-
-.header {
-  display: inline-block;
-  position: relative;
-  margin: auto;
-  margin-top: 10rem;
-}
-
-#logo {
-  margin: auto;
-  height: 20rem;
-}
-
-#discord {
-  position: absolute;
-  right: -4rem;
-  bottom: 0;
-  height: 4rem;
+:host, app-index {
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns:
+  calc(100% / 3) calc(calc(calc(100% / 3) - 31rem) / 2) 4rem 23rem 4rem calc(calc(calc(100% / 3) - 31rem) / 2) calc(100% / 3);
+  grid-template-rows: 10rem 12rem 4rem 4rem 5rem 5rem 5rem 5rem 5rem auto auto;
+  grid-template-areas:
+    ". . . . . . ."
+    ". . . logo . . ."
+    ". . . logo github . ."
+    ". . . logo discord . ."
+    ". . . . . . ."
+    "title title title title title title title"
+    ". . . . . . ."
+    ". . left-nav . right-nav . ."
+    ". . . . . . ."
+    "markdown code code code code code result"
+    "footer footer footer footer footer footer footer";
+  background-color: #0f0f0f;
 }
 
-#github {
-  position: absolute;
-  right: -3.6rem;
-  bottom: 4.2rem;
+.logo {
+  width: 23rem;
+  grid-area: logo;
+}
+
+.github {
+  grid-area: github;
   height: 3.2rem;
+  width: 3.2rem;
+  background-size: cover;
+  background-image: url(/assets/imgs/github-light-120.png);
 }
 
-footer {
-  text-align: center;
-  color: #ECECEC;
-  padding: 2.5rem;
+.discord {
+  grid-area: discord;
+  height: 4rem;
+  width: 4rem;
+  background-size: cover;
+  background-image: url(/assets/imgs/discord-logo-white.svg);
 }
 
-#description {
-  display: block;
-  margin: 5rem 0;
+h1 {
+  grid-area: title;
   text-align: center;
   color: #ECECEC;
-  align-self: end;
   font-family: Roboto;
   font-size: 4rem;
   font-weight: 100;
-  width: 100%;
+}
+h1 img {
+  position: absolute;
+  height: 5rem;
+  vertical-align: bottom;
+}
+
+.placeholder-loading-icon {
   height: 4.8rem;
+  opacity: ${loading ? '0' : '.11666'};
 }
 
-#inner {
-  display: flex;
-  flex-direction: column;
-  align-items: start;
-  justify-content: center;
+.title-placeholder {
+  border-radius: .3rem;
+  margin-left: 1rem;
+  color: ${`hsla(0, 0%, 93%, ${loading ? '1' : '0'})`};
+}
+.title-placeholder { user-select: ${loading ? 'unset' : 'none'}; }
+.title-placeholder { background-color: ${`hsla(0, 0%, 17%, ${loading ? '0' : '1'})`}; }
+
+.to-guide, .to-api {
+  z-index: 1;
+  position: relative;
+  padding: 1rem 4rem;
+  border: .1rem solid;
+  border-radius: .5rem;
+  font-family: Roboto;
+  font-size: 2rem;
+  font-weight: 100;
+  color: white;
+  overflow: hidden;
 }
 
-.example {
+.to-guide {
+  grid-area: left-nav;
+  border-color: #51bb8d;
+  background: linear-gradient(230deg, #0000 49%, #51bb8d 50%);
+}
+.to-api {
+  grid-area: right-nav;
+  border-color: #f9aa40;
+  background: linear-gradient(230deg, #0000 49%, #f9aa40 50%);
+}
+
+/* animation */
+.to-guide, .to-api {
+  background-size: 300% 100%;
+  background-position:right bottom;
+}
+
+.to-guide:hover, .to-api:hover {
+  background-position: left bottom;
+  transition: background-position .3s ease;
+}
+
+.to-guide:before, .to-api:before {
+  content: '';
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 250%;
+  z-index: -1;
+  transition: transform .6s ease;
+  transform: translate(50%);
+  opacity: 1;
+}
+
+.to-guide:hover:before, .to-api:hover:before {
+  transform: translate(-57.5%);
+  opacity: 0;
+}
+
+.to-guide:before {
+  background: linear-gradient(230deg, #51bb8d 49%, #0000 50%);
+}
+.to-api:before {
+  background: linear-gradient(230deg, #f9aa40 49%, #0000 50%);
+}
+/* /animation */
+
+.overview {
+  grid-area: overview;
   display: flex;
   margin: 4rem auto;
   width: 120rem;
 }
 
-.example oz-markdown {
+.overview oz-markdown {
   font-family: Roboto;
   color: #ECECEC;
   font-weight: 300;
@@ -86,122 +157,88 @@ footer {
   flex: 0 0 30%;
 }
 
-.example oz-markdown oz-code {
+.overview oz-markdown oz-code {
   font-size: 1.5rem;
   flex: none;
 }
 
-.example oz-code {
+.overview oz-code {
   flex: 0 0 70%;
 }
 
-@media screen and (max-width: 1250px) {
-  /* #inner {
-    margin: 5rem 2.5rem;
-  } */
-
-  #description {
-    height: calc(4.8rem * 2);
-  }
-
-  .example {
-    flex-direction: column;
-    width: auto;
-    max-width: calc(100% - 1 * 2rem);
-    margin: 0 1rem;
-  }
+.markdown {
+  grid-area: markdown;
+  font-family: Roboto;
+  color: #ECECEC;
+  font-weight: 300;
+  font-size: 1.8rem;
+  line-height: 2.25rem;
+  flex: 0 0 30%;
 }
 
-.soon {
-  margin: auto;
-  padding: 2rem;
-  padding-bottom: 4rem;
+.code {
+  grid-area: code;
+  height: 100%;
+  width: 100%;
+}
+
+.result {
+  grid-area: result;
+}
+
+footer {
   text-align: center;
   color: #ECECEC;
+  padding: 2.5rem;
+  grid-area: footer;
 }
 `
 
-const template = ({host}) => {
-  const descNode = document.createElement('iframe')
-  descNode.setAttribute('frameborder', '0')
-  descNode.setAttribute('scrolling', 'no')
-  descNode.id = 'description'
-  // const items = [{
-  //   documentation: componentOverview.documentation,
-  //   html: componentOverview.style,
-  //   result: descNode,
-  //   value: componentOverview.code
-  // }, {
-  //   documentation: templateOverview.documentation,
-  //   result: 'true',
-  //   value: templateOverview.code
-  // }, {
-  //   documentation: reactivityOverview.documentation,
-  //   result: 'true',
-  //   value: reactivityOverview.code
-  // }]
-//   ${items.map(item => html`<div class="example">
-//   <oz-markdown value=${item.documentation}></oz-markdown>
-//   <oz-code
-//     html=${item.html || ''}
-//     language="javascript"
-//     result=${item.result}
-//     editable="true"
-//     value=${item.value}
-//   ></oz-code>
-// </div>`)}
-  const ozjsBundle = process && process.env.webpack ? '<script src="/assets/code-result.js"></script>' : ''
-  return html`
-  <div class="header">
-    <img id="logo" src="/assets/imgs/logo.svg">
-    <a href="https://github.com/Banou26/ozjs" target="_blank"><img id="github" src="/assets/imgs/github-light-120.png"></a>
-    <a href="https://discord.gg/ZKEbTqf" target="_blank"><img id="discord" src="/assets/imgs/discord-logo-white.svg"></a>
-  </div>
-  ${descNode}
-  <div id="inner">
-    <div class="example">
-      <oz-markdown value=${componentOverview.documentation}></oz-markdown>
-      <oz-code
-        html=${ozjsBundle + componentOverview.style}
-        language="javascript"
-        result=${descNode}
-        editable="true"
-        value=${componentOverview.code}
-      ></oz-code>
-    </div>
-    <div class="example">
-      <oz-markdown value=${templateOverview.documentation}></oz-markdown>
-      <oz-code
-      html=${ozjsBundle}
-        language="javascript"
-        result="true"
-        editable="true"
-        value=${templateOverview.code}
-      ></oz-code>
-    </div>
-    <div class="example">
-      <oz-markdown value=${reactivityOverview.documentation}></oz-markdown>
-      <oz-code
-      html=${ozjsBundle}
-        language="javascript"
-        result="true"
-        editable="true"
-        value=${reactivityOverview.code}
-      ></oz-code>
-    </div>
-    <h2 class="soon">
-      Router and Store examples soon...
-    </h2>
-  </div>
-  <footer>Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas</footer>
+const template = _ => {
+  const result = poz`iframe.result(frameborder="0")`().content.childNodes[0]
+  return poz`
+  img.logo(src="/assets/imgs/logo.svg")
+  a.github(href="https://github.com/Banou26/ozjs" target="_blank" rel="noopener")
+  a.discord(href="https://discord.gg/BBnGvYQ" target="_blank" rel="noopener")
+  h1
+    span Oz.js,
+    span.title-placeholder Progressive Javascript Framework
+    img.placeholder-loading-icon(src="/assets/imgs/loading.svg")
+  router-link.to-guide(to="guide") Guide
+  router-link.to-api(to="api") API
+  oz-markdown.markdown(value=${overview.markdown})
+  oz-code.code(html=${'<script src="/assets/code-result.js"></script>' + overview.style} language="javascript" editable="true" result=${result} value=${overview.code})
+  ${result}
+  footer Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas
   `
 }
 
+// poz`
+// img.logo(src="/assets/imgs/logo.svg")
+// a.github(href="https://github.com/Banou26/ozjs" target="_blank" rel="noopener")
+// a.discord(href="https://discord.gg/BBnGvYQ" target="_blank" rel="noopener")
+// h1
+//   span Oz.js,
+//   span.title-placeholder Progressive Javascript Framework
+//   img.placeholder-loading-icon(src="/assets/imgs/loading.svg")
+// router-link.to-guide(to="guide") Guide
+// router-link.to-api(to="api") API
+// oz-markdown.markdown(value=${overview.markdown})
+// oz-code.code(html=${'<script src="/assets/code-result.js"></script>' + overview.style} language="javascript" editable="true" result=${ref('result')} value=${overview.code})
+// iframe.result(frameborder="0" ${ref('result')})
+// footer Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas
+// `
+
 const Index = {
   name: 'app-index',
-  shadowDom: 'open',
+  state: _ => ({
+    titleLoading: true,
+    interval: undefined
+  }),
   template,
-  style
+  style,
+  connected: ({state}) => (state.interval = setInterval(_ => (state.loading = !state.loading), 2500)),
+  disconencted: ({state: {interval}}) => clearInterval(interval)
 }
 
 export default registerElement(Index)

@@ -11,7 +11,7 @@ code {
 }
 `
 
-const template = ({host, props: { value }}) => {
+const template = ({props: { value }}) => {
   const result = document.createElement('div')
   if (value) result.innerHTML = converter.makeHtml(value)
   return html`${[...result.childNodes]}`
