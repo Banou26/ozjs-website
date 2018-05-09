@@ -1,5 +1,5 @@
-import { poz, css, registerElement } from 'oz.js'
-import Mount from './mount.js'
+import { poz, css, registerElement, ref } from 'oz.js'
+import './mount.js'
 // import Header from './header.js'
 import Code from './code.js'
 import Markdown from './markdown.js'
@@ -194,40 +194,21 @@ footer {
 }
 `
 
-const template = _ => {
-  const result = poz`iframe.result(frameborder="0")`().content.childNodes[0]
-  return poz`
-  img.logo(src="/assets/imgs/logo.svg")
-  a.github(href="https://github.com/Banou26/ozjs" target="_blank" rel="noopener")
-  a.discord(href="https://discord.gg/BBnGvYQ" target="_blank" rel="noopener")
-  h1
-    span Oz.js,
-    span.title-placeholder Progressive Javascript Framework
-    img.placeholder-loading-icon(src="/assets/imgs/loading.svg")
-  router-link.to-guide(to="guide") Guide
-  router-link.to-api(to="api") API
-  oz-markdown.markdown(value=${overview.markdown})
-  oz-code.code(html=${'<script src="/assets/code-result.js"></script>' + overview.style} language="javascript" editable="true" result=${result} value=${overview.code})
-  ${result}
-  footer Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas
-  `
-}
-
-// poz`
-// img.logo(src="/assets/imgs/logo.svg")
-// a.github(href="https://github.com/Banou26/ozjs" target="_blank" rel="noopener")
-// a.discord(href="https://discord.gg/BBnGvYQ" target="_blank" rel="noopener")
-// h1
-//   span Oz.js,
-//   span.title-placeholder Progressive Javascript Framework
-//   img.placeholder-loading-icon(src="/assets/imgs/loading.svg")
-// router-link.to-guide(to="guide") Guide
-// router-link.to-api(to="api") API
-// oz-markdown.markdown(value=${overview.markdown})
-// oz-code.code(html=${'<script src="/assets/code-result.js"></script>' + overview.style} language="javascript" editable="true" result=${ref('result')} value=${overview.code})
-// iframe.result(frameborder="0" ${ref('result')})
-// footer Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas
-// `
+const template = _ => poz`
+img.logo(src="/assets/imgs/logo.svg")
+a.github(href="https://github.com/Banou26/ozjs" target="_blank" rel="noopener")
+a.discord(href="https://discord.gg/BBnGvYQ" target="_blank" rel="noopener")
+h1
+  span Oz.js,
+  span.title-placeholder Progressive Javascript Framework
+  img.placeholder-loading-icon(src="/assets/imgs/loading.svg")
+router-link.to-guide(to="guide") Guide
+router-link.to-api(to="api") API
+oz-markdown.markdown(value=${overview.markdown})
+oz-code.code(html=${'<script src="/assets/code-result.js"></script>' + overview.style} language="javascript" editable="true" result=${ref('result')} value=${overview.code})
+iframe.result(frameborder="0" ${ref('result')})
+footer Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas
+`
 
 const Index = {
   name: 'app-index',
