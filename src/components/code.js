@@ -156,6 +156,7 @@ export default registerElement({
   state: ({host, props, watchers}) => ({
     error: undefined,
     value: undefined,
+    url: undefined,
     ready: false,
     get mountNode () {
       const { result } = props
@@ -181,6 +182,7 @@ export default registerElement({
   }),
   watchers: [
     ({host, state, props: { value: pValue, html }}) => {
+      if (state.url) URL.revokeObjectURL(state.url)
       const { value = pValue, mountNode, ready } = state
       if (!mountNode || !value || !ready) return
       try {
@@ -197,7 +199,7 @@ export default registerElement({
         //   </body>
         // </html>`)
         // mountNode.contentDocument.close()
-        mountNode.srcdoc = `
+        const blob = new Blob([`
         <html>
           <head></head>
           <body>
@@ -205,7 +207,8 @@ export default registerElement({
             <script src="/assets/code-result-bundle.js"></script>
             <script>${value}</script>
           </body>
-        </html>`
+        </html>`], {type: 'text/html'})
+        mountNode.src = (state.url = URL.createObjectURL(blob))
         state.error = undefined
       } catch (err) {
         state.error = err
@@ -215,4 +218,4 @@ export default registerElement({
     }
   ]
 })
-window.html = html
+
