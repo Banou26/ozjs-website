@@ -2,7 +2,6 @@ import { html, css, registerElement } from 'oz.js'
 import { caret } from '../util/caret.js'
 import Prism from 'prismjs'
 import '../util/prism-extends.js'
-const _html = html
 /* global Prism */
 
 const style = _ => css`
@@ -111,6 +110,17 @@ const template = ({host, state, props, template, props: { language, value: pValu
   let borderClass = ''
   if (result instanceof Node) borderClass = 'external'
   else borderClass = result ? 'result' : 'extended'
+  console.log('value', value)
+  if (template && value && typeof value === 'string' && Prism.languages[language]) {
+    const ref = template.refs.get('code')
+    const childNodes = [...template._childNodes[0].childNodes];
+    console.log(ref, template);
+    // console.log('bruh')
+    // console.log(html(Prism.highlight(value, Prism.languages[language]))().childNodes)
+    // console.log('_bruh_')
+    // ref.childNodes.forEach(node => ref.removeChild(node))
+    // [...ref.childNodes].filter((node, i) => childNodes[i] !== node).forEach(node => node.parentNode.removeChild(node))
+  }
   return html`<code
     ${html.ref('code')}
     class="language-${language} ${borderClass} ${error ? 'error' : ''} ${display === 'compact' ? 'compact' : ''}"
@@ -118,7 +128,7 @@ const template = ({host, state, props, template, props: { language, value: pValu
     spellcheck="false"
     on-input=${editable ? ev => input(ev, {host, state}) : null}
     on-keydown=${editable ? keydown : null}
-  ></code>
+  >${value && typeof value === 'string' && Prism.languages[language] ? html(Prism.highlight(value, Prism.languages[language])) : ''}</code>
   ${typeof result === 'string' || error ? html`
   <div class="result ${error ? 'error' : ''}">
     ${error ? error.toString() : mountNode}
@@ -165,10 +175,10 @@ export default registerElement({
           node.classList.add('mountNode')
         }
         window.addEventListener('message', ev => {
-          if (/*refs && refs.has('code') && */ev.source !== node.contentWindow) return
-          // const offset = caret(host, host.querySelector('code'))
+          if (ev.source !== node.contentWindow) return
+          const offset = caret(host, host.querySelector('code'))
           this.error = ev.data
-          // caret(host, host.querySelector('code'), offset)
+          caret(host, host.querySelector('code'), offset)
         })
         node.addEventListener('load', _ => (this.ready = true), { once: true })
       }
@@ -176,7 +186,7 @@ export default registerElement({
     }
   }),
   watchers: [
-    ({host, state, template: { refs } = {}, props: { value: pValue, html, language }}) => {
+    ({host, state, props: { value: pValue, html }}) => {
       if (state.url) URL.revokeObjectURL(state.url)
       const { value = pValue, mountNode, ready } = state
       if (!mountNode || !value || !ready) return
@@ -194,35 +204,16 @@ export default registerElement({
         //   </body>
         // </html>`)
         // mountNode.contentDocument.close()
-        if (refs && refs.has('code')) {
-          const ref = refs.get('code')
-          const _html_ = value && typeof value === 'string' && Prism.languages[language] ? Prism.highlight(value, Prism.languages[language]) : ''
-          if (host.getSelection().focusNode) {
-            const offset = caret(host, ref)
-            ref.innerHTML = _html_
-            caret(host, ref, offset)
-          } else {
-            ref.innerHTML = _html_
-          }
-        }
-        // blob url has cross-origin issues ?
-        // const blob = new Blob([`
-        // <html>
-        //   <head></head>
-        //   <body>
-        //     ${html || ''}
-        //     <script>${value}</script>
-        //   </body>
-        // </html>`], {type: 'text/html'})
-        // mountNode.src = (state.url = URL.createObjectURL(blob))
-        mountNode.srcdoc = state.url = `
+        const blob = new Blob([`
         <html>
           <head></head>
           <body>
             ${html || ''}
+            <script src="/assets/code-result-bundle.js"></script>
             <script>${value}</script>
           </body>
-        </html>`
+        </html>`], {type: 'text/html'})
+        mountNode.src = (state.url = URL.createObjectURL(blob))
         state.error = undefined
       } catch (err) {
         state.error = err

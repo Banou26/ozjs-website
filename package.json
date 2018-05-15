@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "server": "nodemon --inspect --experimental-modules ./server-example/index.mjs",
+    "server": "firebase serve",
+    "servers": "nodemon --inspect --experimental-modules ./server-example/index.mjs",
     "dev": "concurrently \"webpack --watch index=./src/index.js --output-path=./public/assets --output-filename=bundle.js\" \"firebase serve\" \"webpack --watch index=./src/code-result.js --output-path=./public/assets --output-filename=code-result-bundle.js\"",
     "devserver": "webpack-dev-server --hot --config webpack.config.js"
   },

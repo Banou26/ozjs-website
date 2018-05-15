@@ -205,7 +205,7 @@ h1
 router-link.to-guide(to="guide") Guide
 router-link.to-api(to="api") API
 oz-markdown.markdown(value=${overview.markdown})
-oz-code.code(html=${'<script src="/assets/code-result.js"></script>' + overview.style} language="javascript" editable="true" result=${ref('result')} value=${overview.code})
+oz-code.code(html=${'<script src="/assets/code-result-bundle.js"></script>' + overview.style} language="javascript" editable="true" result=${ref('result')} value=${overview.code})
 iframe.result(frameborder="0" ${ref('result')})
 footer Released under the MIT License<br>Copyright © 2018 Dias-Santos Thomas
 `
