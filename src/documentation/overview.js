@@ -2,8 +2,7 @@ export const markdown = `Yeet :)`
 
 export const style = ``
 
-export const code = `
-const externalAPI = name => new Promise(resolve => setTimeout(_ => resolve(Math.random()), 1000))
+export const code = `const externalAPI = name => new Promise(resolve => setTimeout(_ => resolve(Math.random()), 1000))
 
 const style = ({state: { id }}) => css\`
 :host, app-card {
@@ -13,16 +12,20 @@ const style = ({state: { id }}) => css\`
   border-radius: .2rem;
 }
 
-.placeholder {
+.id {
   height: 18px;
-  background-color: hsla(0, 0%, 0%, .5);
   border-radius: .2rem;
+  background-color: \${
+    id && id.$resolved !== false
+    ? ''
+    : 'hsla(0, 0%, 0%, .5)'
+  };
 }
 \`
 
 const template = ({state: {id}, props: {name}}) => poz\`
 .name \${name}
-.id.\${id && id.$resolved !== false ? '' : 'placeholder'} \${id}
+.id \${id}
 \`
 
 registerElement({

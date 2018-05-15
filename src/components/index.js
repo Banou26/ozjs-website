@@ -13,7 +13,7 @@ const style = ({state: { loading }}) => css`
   justify-items: center;
   align-items: center;
   grid-template-columns:
-  calc(100% / 3) calc(calc(calc(100% / 3) - 31rem) / 2) 4rem 23rem 4rem calc(calc(calc(100% / 3) - 31rem) / 2) calc(100% / 3);
+  calc(100% / 3) calc(calc(calc(100% / 3) - 28rem) / 2) 4rem 29rem 4rem calc(calc(calc(100% / 3) - 28rem) / 2) calc(100% / 3);
   grid-template-rows: 10rem 12rem 4rem 4rem 5rem 5rem 5rem 5rem 5rem auto auto;
   grid-template-areas:
     ". . . . . . ."
