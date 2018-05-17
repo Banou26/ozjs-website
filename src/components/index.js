@@ -79,6 +79,7 @@ h1 img {
 .title-placeholder { background-color: ${`hsla(0, 0%, 17%, ${loading ? '0' : '1'})`}; }
 
 .to-guide, .to-api {
+  display: inline-block;
   z-index: 1;
   position: relative;
   padding: 1rem 4rem;
