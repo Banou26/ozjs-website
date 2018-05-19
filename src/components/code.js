@@ -197,10 +197,11 @@ export default registerElement({
         if (refs && refs.has('code')) {
           const ref = refs.get('code')
           const _html_ = value && typeof value === 'string' && Prism.languages[language] ? Prism.highlight(value, Prism.languages[language]) : ''
-          if (host.getSelection().focusNode) {
-            const offset = caret(host, ref)
+          const elem = host.getSelection ? host : window
+          if (elem.getSelection().focusNode) {
+            const offset = caret(elem, ref)
             ref.innerHTML = _html_
-            caret(host, ref, offset)
+            caret(elem, ref, offset)
           } else {
             ref.innerHTML = _html_
           }

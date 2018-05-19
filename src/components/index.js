@@ -203,8 +203,8 @@ h1
   span Oz.js,
   span.title-placeholder Progressive Javascript Framework
   img.placeholder-loading-icon(src="/assets/imgs/loading.svg")
-router-link.to-guide(to="guide") Guide
-router-link.to-api(to="api") API
+a.to-guide(to="guide" is="router-link") Guide
+a.to-api(to="api" is="router-link") API
 oz-markdown.markdown(value=${overview.markdown})
 oz-code.code(html=${'<script src="/assets/code-result-bundle.js"></script>' + overview.style} language="javascript" editable="true" result=${ref('result')} value=${overview.code})
 iframe.result(frameborder="0" ${ref('result')})

@@ -30,7 +30,6 @@ export default registerElement({
     app-mount {
       height: 100%;
       width: 100%;
-      display: inline-block;
       background-color: #0f0f0f/*#151a1e #262d33*/;
     }
     `
