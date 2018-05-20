@@ -13,6 +13,7 @@ oz-code, :host {
 }
 
 code {
+  display: inline-block;
   height: calc(100% - 2rem);
   width: 100%;
   position: relative;
